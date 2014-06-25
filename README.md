@@ -3,7 +3,8 @@ lrutest
 
 Simple test to compare implementations of LRU Caching.
 
-PLRU is the current version of the preparedLRU code in the gocql PullRequest
+PLRU is the current version of the preparedLRU code in the gocql PullRequest.
+
 LLRU is a new version using the container/list package.
 
 Results
