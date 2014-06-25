@@ -5,10 +5,14 @@ import (
 	"testing"
 )
 
+const (
+	lruSize = 1000
+)
+
 func BenchmarkGetPLRU(b *testing.B) {
 	plru := NewPreparedLRU()
-	plru.setMaxStmts(1000)
-	for i := 0; i < 1000; i++ {
+	plru.setMaxStmts(lruSize)
+	for i := 0; i < lruSize; i++ {
 		plru.set("A", strconv.FormatInt(int64(i), 10), "A")
 	}
 	// run the Fib function b.N times
@@ -19,8 +23,8 @@ func BenchmarkGetPLRU(b *testing.B) {
 
 func BenchmarkGetLLRU(b *testing.B) {
 	plru := NewListLRU()
-	plru.setMaxStmts(1000)
-	for i := 0; i < 1000; i++ {
+	plru.setMaxStmts(lruSize)
+	for i := 0; i < lruSize; i++ {
 		plru.set("A", strconv.FormatInt(int64(i), 10), "A")
 	}
 	// run the Fib function b.N times
@@ -31,31 +35,31 @@ func BenchmarkGetLLRU(b *testing.B) {
 
 func BenchmarkNotSequentialPLRU(b *testing.B) {
 	plru := NewPreparedLRU()
-	plru.setMaxStmts(1000)
-	for i := 0; i < 1000; i++ {
+	plru.setMaxStmts(lruSize)
+	for i := 0; i < lruSize; i++ {
 		plru.set("A", strconv.FormatInt(int64(i), 10), "A")
 	}
 	// run the Fib function b.N times
 	for n := 1; n <= b.N; n++ {
-		plru.get("A", strconv.FormatInt(int64(1000%n), 10))
+		plru.get("A", strconv.FormatInt(int64(lruSize%n), 10))
 	}
 }
 
 func BenchmarkNotSequentialLLRU(b *testing.B) {
 	plru := NewListLRU()
-	plru.setMaxStmts(1000)
-	for i := 0; i < 1000; i++ {
+	plru.setMaxStmts(lruSize)
+	for i := 0; i < lruSize; i++ {
 		plru.set("A", strconv.FormatInt(int64(i), 10), "A")
 	}
 	// run the Fib function b.N times
 	for n := 1; n <= b.N; n++ {
-		plru.get("A", strconv.FormatInt(int64(1000%n), 10))
+		plru.get("A", strconv.FormatInt(int64(lruSize%n), 10))
 	}
 }
 
 func BenchmarkSetPLRU(b *testing.B) {
 	plru := NewPreparedLRU()
-	plru.setMaxStmts(1000)
+	plru.setMaxStmts(lruSize)
 	// run the Fib function b.N times
 	for n := 0; n < b.N; n++ {
 		plru.set("A", strconv.FormatInt(int64(n), 10), "A")
@@ -64,7 +68,7 @@ func BenchmarkSetPLRU(b *testing.B) {
 
 func BenchmarkSetLLRU(b *testing.B) {
 	plru := NewListLRU()
-	plru.setMaxStmts(1000)
+	plru.setMaxStmts(lruSize)
 	// run the Fib function b.N times
 	for n := 0; n < b.N; n++ {
 		plru.set("A", strconv.FormatInt(int64(n), 10), "A")
